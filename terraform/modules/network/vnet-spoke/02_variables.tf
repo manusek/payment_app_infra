@@ -1,0 +1,33 @@
+variable "workload" {
+  description = "Name of workload"
+  type = string
+}
+
+variable "environment" {
+  description = "Type of enviromet"
+  type = string
+}
+
+variable "location" {
+  description = "Resource location"
+  type = string
+}
+
+variable "vnet_cidr" {
+  description = "CIDR of spoke vnet"
+  type = string
+  default = "10.0.0.0/20"
+}
+
+
+variable "snet_cidr_aks" {
+  description = "CIDR of AKS snet"
+  type = string
+  default = "10.0.0.0/21"
+}
+
+variable "snet_cidr_endpoints" {
+  description = "CIDR of endpoints snet"
+  type = string
+  default = "10.0.15.0/24"
+}
