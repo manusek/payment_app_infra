@@ -1,5 +1,5 @@
 
-resource "azurerm_resource_group" "rg" {
+resource "azurerm_resource_group" "rg_hub" {
   name     = "rg-${var.workload}-${var.environment}-${var.location}-001"
   location = var.location
 }
@@ -9,28 +9,19 @@ resource "azurerm_resource_group" "rg" {
 #########
 
 # HUB VNET
-resource "azurerm_virtual_network" "vnet" {
+resource "azurerm_virtual_network" "vnet_hub" {
   name                = "vnet-${var.workload}-${var.environment}-${var.location}-001"
   address_space       = [var.vnet_cidr]
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg_hub.location
+  resource_group_name = azurerm_resource_group.rg_hub.name
 }
 
 # FIREWALL SNET
 resource "azurerm_subnet" "snet" {
   name                 = "AzureFirewallSubnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
+  resource_group_name  = azurerm_resource_group.rg_hub.name
+  virtual_network_name = azurerm_virtual_network.vnet_hub.name
   address_prefixes     = [var.snet_cidr]
 }
 
-################## 
-# SECURITY GROUPS
-##################
-
-resource "azurerm_network_security_group" "nsg" {
-  name                = "nsg-${var.workload}-${var.environment}-${var.location}-001"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-}
 

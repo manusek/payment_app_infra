@@ -6,6 +6,14 @@ module "hub-network" {
   location    = var.location
 }
 
+module "spoke-network" {
+  source = "./modules/network/vnet-spoke"
+
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+}
+
 module "hub-firewall" {
   source = "./modules/firewall"
 
@@ -17,3 +25,4 @@ module "hub-firewall" {
   rg_location = module.hub-network.rg_location
   snet_id     = module.hub-network.snet_id
 }
+
