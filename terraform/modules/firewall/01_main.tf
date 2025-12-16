@@ -19,3 +19,6 @@ resource "azurerm_firewall" "afw" {
     public_ip_address_id = azurerm_public_ip.pip.id
   }
 }
+
+
+# TODO: DNAT RULES DLA FIREWALL -> AKS LB 
