@@ -42,3 +42,14 @@ module "vnet_peering" {
   vnet_hub_id   = module.hub-network.hub_vnet_id
 }
 
+module "acr" {
+  source = "./modules/acr"
+
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+
+  rg_name = module.spoke-network.rg_name
+  rg_location = module.spoke-network.rg_location
+}
+
