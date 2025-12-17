@@ -26,3 +26,19 @@ module "hub-firewall" {
   snet_id     = module.hub-network.snet_id
 }
 
+module "vnet_peering" {
+  source = "./modules/network/vnet_peering"
+
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+
+  rg_spoke_name   = module.spoke-network.rg_name
+  vnet_spoke_name = module.spoke-network.spoke_vnet_name
+  vnet_spoke_id   = module.spoke-network.spoke_vnet_id
+
+  rg_hub_name   = module.hub-network.rg_name
+  vnet_hub_name = module.hub-network.hub_vnet_name
+  vnet_hub_id   = module.hub-network.hub_vnet_id
+}
+
