@@ -10,7 +10,7 @@ resource "azurerm_resource_group" "rg_spoke" {
 
 # SPOKE VNET
 resource "azurerm_virtual_network" "vnet_spoke" {
-  name                = "vnet-${var.workload}-${var.environment}-${var.location}-002"
+  name                = "vnet-${var.workload}-spoke-${var.environment}-${var.location}-002"
   address_space       = [var.vnet_cidr]
   location            = azurerm_resource_group.rg_spoke.location
   resource_group_name = azurerm_resource_group.rg_spoke.name
