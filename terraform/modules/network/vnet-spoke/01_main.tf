@@ -1,6 +1,6 @@
 
 resource "azurerm_resource_group" "rg_spoke" {
-  name     = "rg-${var.workload}-${var.environment}-${var.location}-002"
+  name     = "rg-${var.workload}-spoke-${var.environment}-${var.location}-002"
   location = var.location
 }
 
