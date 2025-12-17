@@ -16,12 +16,12 @@ variable "location" {
 variable "vnet_cidr" {
   description = "CIDR of hub vnet"
   type = string
-  default = "10.0.0.0/22"
+  default = "10.2.0.0/21"
 }
 
 
 variable "snet_cidr" {
   description = "CIDR of firewall snet"
   type = string
-  default = "10.0.0.0/24"
+  default = "10.2.0.0/24"
 }

@@ -29,5 +29,5 @@ variable "snet_cidr_aks" {
 variable "snet_cidr_endpoints" {
   description = "CIDR of endpoints snet"
   type = string
-  default = "10.0.15.0/24"
+  default = "10.0.8.0/23"
 }
