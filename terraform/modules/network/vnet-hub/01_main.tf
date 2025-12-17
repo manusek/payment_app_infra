@@ -24,4 +24,3 @@ resource "azurerm_subnet" "snet" {
   address_prefixes     = [var.snet_cidr]
 }
 
-
