@@ -53,3 +53,17 @@ module "acr" {
   rg_location = module.spoke-network.rg_location
 }
 
+module "pep" {
+  source = "./modules/pep"
+
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+
+  rg_name = module.spoke-network.rg_name
+  rg_location = module.spoke-network.rg_location
+
+  acr_id = module.acr.acr_id
+  
+  pep_snet_id = module.spoke-network.pep_snet_id
+}
