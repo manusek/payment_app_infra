@@ -1,3 +1,7 @@
+############
+# PUBLIC IP
+############
+
 resource "azurerm_public_ip" "pip" {
   name                = "pip-${var.workload}-${var.environment}-${var.location}-001"
   location            = var.rg_location
@@ -5,6 +9,11 @@ resource "azurerm_public_ip" "pip" {
   allocation_method   = "Static"
   sku                 = "Standard"
 }
+
+
+############
+# FIREWALL
+############
 
 resource "azurerm_firewall" "afw" {
   name                = "afw-${var.workload}-${var.environment}-${var.location}-001"
@@ -22,44 +31,38 @@ resource "azurerm_firewall" "afw" {
 
 
 ############
-# NAT RULES
+# FIREWALL POLICY 
 ############
 
-resource "azurerm_firewall_nat_rule_collection" "dnat" {
-  name                = "dnat-${var.workload}-${var.environment}-${var.location}-001"
-  azure_firewall_name = azurerm_firewall.afw.name
+resource "azurerm_firewall_policy" "afwp" {
+  name                = "afwp-${var.workload}-${var.environment}-${var.location}-001"
   resource_group_name = var.rg_name
-  priority            = 100
-  action              = "Dnat"
+  location            = var.rg_location
+}
 
-  rule {
-    name = "dnat_firewall_to_lb"
 
-    # INTERNET
-    source_addresses = [
-      "0.0.0.0/0",
-    ]
+############
+# POLICY RULES
+############
 
-    # PORTY NA KTORE PRZYCHODZI RUCH Z INTERNETU
-    destination_ports = [
-      "443",
-    ]
-
-    # PUBLICZNY ADRES FIREWALL 
-    destination_addresses = [
-      azurerm_public_ip.pip.ip_address
-    ]
-
-    # PORT NA KTORY MA TRAFIAC WEWNATRZ SIECI
-    translated_port = 443
-
-    # ADRES LB AKS
-    # TODO: ZMIENIC TO NA PRAWDZIWY ADRES PO UTWORZENIU AKS, POKI CO ADRES JEST PRZYKLADOWY
-    translated_address = "10.10.10.10./1"
-
-    protocols = [
-      "TCP",
-      "UDP",
-    ]
+resource "azurerm_firewall_policy_rule_collection_group" "example" {
+  name               = "rcg-${var.workload}-${var.environment}-${var.location}-001"
+  firewall_policy_id = azurerm_firewall_policy.afwp.id
+  priority           = 500
+  
+  nat_rule_collection {
+    name     = "dnat_firewall_to_aks"
+    priority = 300
+    action   = "Dnat"
+    rule {
+      name                = "dnat_rule1"
+      protocols           = ["TCP", "UDP"]
+      source_addresses    = ["0.0.0.0/0"]
+      destination_address = azurerm_public_ip.pip.ip_address
+      destination_ports   = ["443"]
+      # ADRES INTERNAL LB DLA AKS - ADRES WPISANY TESTOWO DO ZMIANY W PRZYSZLOSCI
+      translated_address  = "192.168.0.1"
+      translated_port     = "443"
+    }
   }
 }
