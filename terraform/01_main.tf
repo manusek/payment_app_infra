@@ -49,7 +49,7 @@ module "acr" {
   environment = var.environment
   location    = var.location
 
-  rg_name = module.spoke-network.rg_name
+  rg_name     = module.spoke-network.rg_name
   rg_location = module.spoke-network.rg_location
 }
 
@@ -60,11 +60,11 @@ module "pep" {
   environment = var.environment
   location    = var.location
 
-  rg_name = module.spoke-network.rg_name
+  rg_name     = module.spoke-network.rg_name
   rg_location = module.spoke-network.rg_location
 
   acr_id = module.acr.acr_id
-  
+
   pep_snet_id = module.spoke-network.pep_snet_id
 }
 
@@ -75,8 +75,19 @@ module "private_dns_zone" {
   environment = var.environment
   location    = var.location
 
-  rg_name = module.spoke-network.rg_name
-  spoke_vnet_id = module.spoke-network.spoke_vnet_id
-  acr_name = module.acr.acr_name
+  rg_name        = module.spoke-network.rg_name
+  spoke_vnet_id  = module.spoke-network.spoke_vnet_id
+  acr_name       = module.acr.acr_name
   pep_private_ip = module.pep.pep_private_ip
+}
+
+module "kv" {
+  source = "./modules/kv"
+
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+
+  rg_location = module.spoke-network.rg_location
+  rg_name     = module.spoke-network.rg_name
 }
