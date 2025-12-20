@@ -23,12 +23,22 @@ variable "acr_name" {
   type = string
 }
 
+variable "kv_name" {
+  description = "Name of kv for private endpoint"
+  type = string
+}
+
 variable "spoke_vnet_id" {
   description = "ID of vnet for DNS zone"
   type = string
 }
 
-variable "pep_private_ip" {
-  description = "Private endpoint ip for dns zone"
+variable "acr_pep_private_ip" {
+  description = "ACR private endpoint ip for dns zone"
+  type = string
+}
+
+variable "kv_pep_private_ip" {
+  description = "Key Vault private endpoint ip for dns zone"
   type = string
 }

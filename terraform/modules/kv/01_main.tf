@@ -11,5 +11,11 @@ resource "azurerm_key_vault" "kv" {
   sku_name = "standard"
   
   rbac_authorization_enabled = true
-  public_network_access_enabled = false
+  public_network_access_enabled = true  # true na potrzeby testow
+}
+
+resource "azurerm_role_assignment" "kv_rbac_role" {
+  scope                = azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = data.azurerm_client_config.current.object_id
 }

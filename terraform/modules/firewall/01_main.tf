@@ -41,9 +41,9 @@ resource "azurerm_firewall_policy" "afwp" {
 }
 
 
-############
+##############
 # POLICY RULES
-############
+##############
 
 resource "azurerm_firewall_policy_rule_collection_group" "example" {
   name               = "rcg-${var.workload}-${var.environment}-${var.location}-001"
