@@ -42,3 +42,7 @@ variable "kv_pep_private_ip" {
   description = "Key Vault private endpoint ip for dns zone"
   type = string
 }
+
+variable "db_snet_id" {
+  description = "Subnet where database is"
+}
