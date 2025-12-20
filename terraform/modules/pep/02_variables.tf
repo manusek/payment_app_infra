@@ -29,6 +29,11 @@ variable "pep_snet_id" {
 }
 
 variable "acr_id" {
-  description = "Id of acr for private enpoint"
+  description = "Id of acr for acr connected by endpoint"
+  type = string
+}
+
+variable "kv_id" {
+  description = "Id of kv conntected by endpoint"
   type = string
 }
