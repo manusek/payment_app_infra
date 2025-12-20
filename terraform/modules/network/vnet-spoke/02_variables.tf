@@ -19,7 +19,6 @@ variable "vnet_cidr" {
   default = "10.0.0.0/20"
 }
 
-
 variable "snet_cidr_aks" {
   description = "CIDR of AKS snet"
   type = string
@@ -30,4 +29,10 @@ variable "snet_cidr_endpoints" {
   description = "CIDR of endpoints snet"
   type = string
   default = "10.0.8.0/23"
+}
+
+variable "snet_cidr_db" {
+  description = "CIDR of DB snet"
+  type = string
+  default = "10.0.10.0/24"
 }

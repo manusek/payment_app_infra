@@ -17,3 +17,7 @@ output "spoke_vnet_id" {
 output "pep_snet_id" {
   value = azurerm_subnet.snet2.id
 }
+
+output "db_snet_id" {
+  value = azurerm_subnet.snet3.id
+}
