@@ -2,8 +2,8 @@
 # PUBLIC IP
 ############
 
-resource "azurerm_public_ip" "pip" {
-  name                = "pip-${var.workload}-${var.environment}-${var.location}-001"
+resource "azurerm_public_ip" "pip_firewall" {
+  name                = "pip-firewall-${var.workload}-${var.environment}-${var.location}-001"
   location            = var.rg_location
   resource_group_name = var.rg_name
   allocation_method   = "Static"
@@ -25,7 +25,7 @@ resource "azurerm_firewall" "afw" {
   ip_configuration {
     name                 = "configuration"
     subnet_id            = var.snet_id
-    public_ip_address_id = azurerm_public_ip.pip.id
+    public_ip_address_id = azurerm_public_ip.pip_firewall.id
   }
 }
 
@@ -58,7 +58,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "example" {
       name                = "dnat_rule1"
       protocols           = ["TCP", "UDP"]
       source_addresses    = ["0.0.0.0/0"]
-      destination_address = azurerm_public_ip.pip.ip_address
+      destination_address = azurerm_public_ip.pip_firewall.ip_address
       destination_ports   = ["443"]
       # ADRES INTERNAL LB DLA AKS - ADRES WPISANY TESTOWO DO ZMIANY W PRZYSZLOSCI
       translated_address  = "192.168.0.1"
