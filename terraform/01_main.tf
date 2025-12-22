@@ -113,3 +113,15 @@ module "database" {
   db_snet_id             = module.spoke-network.db_snet_id
   db_private_dns_zone_id = module.private_dns_zone.db_private_dns_zone_id
 }
+
+module "bastion_host" {
+  source = "./modules/bastion_host"
+
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+
+  rg_name         = module.hub-network.rg_name
+  rg_location     = module.hub-network.rg_location
+  snet_bastion_id = module.hub-network.snet_bastion_id
+}
