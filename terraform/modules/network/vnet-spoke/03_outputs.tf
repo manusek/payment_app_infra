@@ -21,3 +21,7 @@ output "pep_snet_id" {
 output "db_snet_id" {
   value = azurerm_subnet.snet3.id
 }
+
+output "jumpbox_snet_id" {
+  value = azurerm_subnet.snet4.id
+}

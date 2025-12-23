@@ -36,3 +36,9 @@ variable "snet_cidr_db" {
   type = string
   default = "10.0.10.0/24"
 }
+
+variable "snet_cidr_jumpbox" {
+  description = "CIDR of jumpbox snet"
+  type = string
+  default = "10.0.11.0/27"
+}

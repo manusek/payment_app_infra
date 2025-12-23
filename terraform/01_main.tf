@@ -125,3 +125,40 @@ module "bastion_host" {
   rg_location     = module.hub-network.rg_location
   snet_bastion_id = module.hub-network.snet_bastion_id
 }
+
+module "jumpbox_vm" {
+  source = "./modules/jumpbox_vm"
+
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+
+  rg_name = module.spoke-network.rg_name
+  rg_location = module.spoke-network.rg_location
+  jumpbox_snet_id = module.spoke-network.jumpbox_snet_id
+}
+
+module "nsg" {
+  source = "./modules/nsg"
+
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+
+  rg_name = module.spoke-network.rg_name
+  rg_location = module.spoke-network.rg_location
+  jumpbox_snet_id = module.spoke-network.jumpbox_snet_id
+}
+
+module "udr" {
+  source = "./modules/udr"
+
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+
+  rg_name = module.spoke-network.rg_name
+  rg_location = module.spoke-network.rg_location
+  jumpbox_snet_id = module.spoke-network.jumpbox_snet_id
+  firewall_private_ip = module.hub-firewall.firewall_private_ip
+}
