@@ -10,6 +10,7 @@ resource "azurerm_bastion_host" "bas" {
   name                = "bas-${var.workload}-${var.environment}-${var.location}-002"
   location            = var.rg_location
   resource_group_name = var.rg_name
+  sku                 = "Standard"
 
   ip_configuration {
     name                 = "bastion_configuration"
