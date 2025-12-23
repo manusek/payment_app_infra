@@ -19,7 +19,7 @@ resource "azurerm_firewall" "afw" {
   name                = "afw-${var.workload}-${var.environment}-${var.location}-001"
   location            = var.rg_location
   resource_group_name = var.rg_name
-  sku_name            = "AZFW_Hub"
+  sku_name            = "AZFW_VNet"
   sku_tier            = "Standard"
 
   ip_configuration {
@@ -48,11 +48,11 @@ resource "azurerm_firewall_policy" "afwp" {
 resource "azurerm_firewall_policy_rule_collection_group" "example" {
   name               = "rcg-${var.workload}-${var.environment}-${var.location}-001"
   firewall_policy_id = azurerm_firewall_policy.afwp.id
-  priority           = 500
+  priority           = 100
   
   nat_rule_collection {
     name     = "dnat_firewall_to_aks"
-    priority = 300
+    priority = 100
     action   = "Dnat"
     rule {
       name                = "dnat_rule1"
@@ -63,6 +63,62 @@ resource "azurerm_firewall_policy_rule_collection_group" "example" {
       # ADRES INTERNAL LB DLA AKS - ADRES WPISANY TESTOWO DO ZMIANY W PRZYSZLOSCI
       translated_address  = "192.168.0.1"
       translated_port     = "443"
+    }
+  }
+
+network_rule_collection {
+    name     = "network_rule_collection1"
+    priority = 200
+    action   = "Allow"
+    rule {
+      name                  = "AllowDNS"
+      protocols             = ["TCP", "UDP"]
+      source_addresses      = ["10.0.11.0/27"]
+      destination_addresses = ["168.63.129.16"]
+      destination_ports     = ["53"]
+    }
+  }
+
+  application_rule_collection {
+    name     = "app_rule_collection1"
+    priority = 300
+    action   = "Deny"
+    rule {
+      name = "app_rule_collection1_rule1"
+      protocols {
+        type = "Http"
+        port = 80
+      }
+      protocols {
+        type = "Https"
+        port = 443
+      }
+      source_addresses  = ["10.0.11.0/27"]
+      destination_fqdns = [
+        "security.ubuntu.com",
+        "archive.ubuntu.com",
+        "changelogs.ubuntu.com",
+        "apt.postgresql.org",
+        "azure.archive.ubuntu.com",
+        # DODAJ TE NAZWY:
+        "motd.ubuntu.com",
+        "contracts.canonical.com"
+      ]
+    }
+  }
+
+    network_rule_collection {
+    name     = "net_jumpbox_outbound_repos_final"
+    priority = 250 # Miedzy DNS (200) a App (300)
+    action   = "Allow"
+    rule {
+      name                  = "AllowUbuntuAndAzureRepos"
+      protocols             = ["TCP"] # Apt uzywa TCP
+      source_addresses      = ["10.0.11.0/27"]
+      # source_port_ranges    = ["*"]
+      # Uzywamy tagow uslug dla bezpieczenstwa i niezawodnosci:
+      destination_addresses = ["AzureCloud", "Canonical", "AzureUpdate"] 
+      destination_ports = ["80", "443"]
     }
   }
 }
