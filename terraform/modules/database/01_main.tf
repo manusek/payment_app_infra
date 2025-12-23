@@ -2,7 +2,7 @@ resource "azurerm_postgresql_flexible_server" "psqlflexibleserver" {
   name                          = "psql-${var.workload}-${var.environment}-${var.location}-001"
   resource_group_name           = var.rg_name
   location                      = var.rg_location
-  version                       = "12"
+  version                       = "16"
   delegated_subnet_id           = var.db_snet_id
   private_dns_zone_id           = var.db_private_dns_zone_id
   public_network_access_enabled = false
@@ -17,3 +17,12 @@ resource "azurerm_postgresql_flexible_server" "psqlflexibleserver" {
   depends_on = [var.db_private_link]
 
 }
+
+resource "azurerm_postgresql_flexible_server_database" "payments_db" {
+  name      = "payments"
+  server_id = azurerm_postgresql_flexible_server.psqlflexibleserver.id
+  collation = "en_US.utf8"
+  charset   = "UTF8"
+}
+
+//TODO: OGARNAC ROUTING DLA VM ZEBY SZEDL PRZEZ FIREWALL
