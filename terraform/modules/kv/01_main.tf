@@ -10,7 +10,7 @@ resource "azurerm_key_vault" "kv" {
   purge_protection_enabled    = false
   sku_name = "standard"
   
-  rbac_authorization_enabled = true
+  # rbac_authorization_enabled = true
   public_network_access_enabled = true  # true na potrzeby testow
 }
 

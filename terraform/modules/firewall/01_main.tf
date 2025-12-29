@@ -107,7 +107,7 @@ network_rule_collection {
     }
   }
 
-    network_rule_collection {
+  network_rule_collection {
     name     = "net_jumpbox_outbound_repos_final"
     priority = 250 # Miedzy DNS (200) a App (300)
     action   = "Allow"
