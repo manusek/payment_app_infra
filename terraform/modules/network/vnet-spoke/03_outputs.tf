@@ -14,6 +14,9 @@ output "spoke_vnet_id" {
   value = azurerm_virtual_network.vnet_spoke.id
 }
 
+
+# SUBNET IDs
+
 output "pep_snet_id" {
   value = azurerm_subnet.snet2.id
 }
@@ -24,4 +27,8 @@ output "db_snet_id" {
 
 output "jumpbox_snet_id" {
   value = azurerm_subnet.snet4.id
+}
+
+output "aks_subnet_id" {
+  value = azurerm_subnet.snet1.id
 }

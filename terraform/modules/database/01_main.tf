@@ -7,6 +7,7 @@ resource "azurerm_postgresql_flexible_server" "psqlflexibleserver" {
   private_dns_zone_id           = var.db_private_dns_zone_id
   public_network_access_enabled = false
   administrator_login           = "superuser1234"
+  // TODO: ZMIENIC TO NA RANDOM HASLO 
   administrator_password        = "superuserpassword1234"
   zone                          = "1"
 
@@ -24,5 +25,3 @@ resource "azurerm_postgresql_flexible_server_database" "payments_db" {
   collation = "en_US.utf8"
   charset   = "UTF8"
 }
-
-//TODO: OGARNAC ROUTING DLA VM ZEBY SZEDL PRZEZ FIREWALL
