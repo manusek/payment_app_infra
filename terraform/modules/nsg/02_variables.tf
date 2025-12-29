@@ -13,20 +13,17 @@ variable "location" {
   type = string
 }
 
-variable "vnet_cidr" {
-  description = "CIDR of hub vnet"
+variable "rg_name" {
+  description = "Name of rg"
   type = string
-  default = "10.2.0.0/21"
 }
 
-variable "snet_cidr_firewall" {
-  description = "CIDR of firewall snet"
+variable "rg_location" {
+  description = "Location of rg"
   type = string
-  default = "10.2.0.0/26"
 }
 
-variable "snet_cidr_bastion" {
-  description = "CIDR of firewall snet"
+variable "jumpbox_snet_id" {
+  description = "Id of subnet where jumpbox vm is configured"
   type = string
-  default = "10.2.0.64/26"
 }
