@@ -150,8 +150,25 @@ module "nsg" {
   jumpbox_snet_id = module.spoke-network.jumpbox_snet_id
 }
 
-module "udr" {
-  source = "./modules/udr"
+# module "udr" {
+#   source = "./modules/udr"
+
+#   workload    = var.workload
+#   environment = var.environment
+#   location    = var.location
+
+#   rg_name = module.spoke-network.rg_name
+#   rg_location = module.spoke-network.rg_location
+#   jumpbox_snet_id = module.spoke-network.jumpbox_snet_id
+#   firewall_private_ip = module.hub-firewall.firewall_private_ip
+# }
+
+module "admin" {
+  source = "./modules/admins"
+}
+
+module "aks" {
+  source = "./modules/aks"
 
   workload    = var.workload
   environment = var.environment
@@ -159,6 +176,9 @@ module "udr" {
 
   rg_name = module.spoke-network.rg_name
   rg_location = module.spoke-network.rg_location
-  jumpbox_snet_id = module.spoke-network.jumpbox_snet_id
-  firewall_private_ip = module.hub-firewall.firewall_private_ip
+  spoke_vnet_id = module.spoke-network.spoke_vnet_id
+  aks_subnet_id = module.spoke-network.aks_subnet_id
+  acr_id = module.acr.acr_id
+
+  aks_rbac_admin_group_object_id = module.admin.admin_group_id
 }
