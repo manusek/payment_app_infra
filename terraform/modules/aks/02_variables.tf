@@ -38,7 +38,6 @@ variable "aks_rbac_admin_group_object_id" {
   description = "value of the AKS administrators group object id in Azure Active Directory"
 }
 
-
 variable "spoke_vnet_id" {
   description = "Id of spoke vnet"
   type = string
