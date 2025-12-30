@@ -4,6 +4,11 @@ locals {
   group_uuid_clean = regex("([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})", var.aks_rbac_admin_group_object_id)[0]
 }
 
+
+######
+# AKS
+######
+
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "aks-${var.workload}-${var.environment}-${var.location}-001"
   location            = var.rg_location
@@ -32,12 +37,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   network_profile {
-      network_plugin   = "kubenet"
-    # Nowy, unikalny zakres dla Podów (Aplikacji) - uzywamy puli 10.1.x.x
+    network_plugin   = "kubenet"
     pod_cidr           = "10.1.0.0/16" 
-    # Nowy, unikalny zakres dla Usług wewnatrz klastra (wirtualne IP dla Service'ow)
     service_cidr       = "10.2.0.0/24" 
-    # Adres IP dla serwera DNS klastra (wewnatrz service_cidr)
     dns_service_ip     = "10.2.0.10" 
   }
 
@@ -46,23 +48,22 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 }
 
-# uprawnienie dla aks do pobierania obrazow z acr
+
+###########
+# AKS ROLES
+###########
+
+# uprawnienie dla aks (kubelet) do pobierania obrazow z acr
 resource "azurerm_role_assignment" "acrpull_role" {
   scope                = var.acr_id
   role_definition_name = "AcrPull"
   principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity.0.object_id
 }
 
+# uprawnienie dla aks (control plane) do tworzenia zasobow w podsieci
 resource "azurerm_role_assignment" "network_role" {
-  scope                = var.spoke_vnet_id
+  scope                = var.aks_subnet_id
   role_definition_name = "Network Contributor"
-  # principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity.0.object_id
-    principal_id         = azurerm_kubernetes_cluster.aks.identity.0.principal_id
+  # id tozsamosci aks w entra id, czyli managed identity przypisana do klastra aks
+  principal_id         = azurerm_kubernetes_cluster.aks.identity.0.principal_id
 }
-
-# # grant permission to admin group to manage aks
-# resource "azurerm_role_assignment" "aks_user_roles" {
-#   scope                = azurerm_kubernetes_cluster.aks.id
-#   role_definition_name = "Azure Kubernetes Service Cluster User Role"
-#   principal_id         = var.aks_rbac_admin_group_object_id
-# }
