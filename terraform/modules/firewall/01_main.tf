@@ -30,9 +30,9 @@ resource "azurerm_firewall" "afw" {
 }
 
 
-############
+##################
 # FIREWALL POLICY 
-############
+##################
 
 resource "azurerm_firewall_policy" "afwp" {
   name                = "afwp-${var.workload}-${var.environment}-${var.location}-001"
