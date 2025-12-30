@@ -40,6 +40,11 @@ module "vnet_peering" {
   rg_hub_name   = module.hub-network.rg_name
   vnet_hub_name = module.hub-network.hub_vnet_name
   vnet_hub_id   = module.hub-network.hub_vnet_id
+
+    depends_on = [
+    module.aks,
+    module.spoke-network
+  ]
 }
 
 module "acr" {
@@ -179,6 +184,15 @@ module "aks" {
   spoke_vnet_id = module.spoke-network.spoke_vnet_id
   aks_subnet_id = module.spoke-network.aks_subnet_id
   acr_id = module.acr.acr_id
-
   aks_rbac_admin_group_object_id = module.admin.admin_group_id
+}
+
+module "ingress_nginx" {
+  source = "./modules/nginx_ingress_controller"
+  
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+
+  aks_cluster_id = module.aks.aks_cluster_id
 }
