@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-httpbin-deployment
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # mowi ze pody z etykieta test-httpbin naleza do tego deploymentu
+      app: test-httpbin
+  template:
+    metadata:
+      labels:
+        # nadaje etykiety test-httpbin utworzonym podom
+        app: test-httpbin
+    spec:
+      containers:
+        - name: httpbin
+          image: kennethreitz/httpbin
+          ports:
+            - containerPort: 80

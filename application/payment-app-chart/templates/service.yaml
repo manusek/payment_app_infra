@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "payment-app-chart.fullname" . }}-svc
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "payment-app-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}  # port na który przychodzi ruch
+      targetPort: 80                  # port na który ruch jest przekierowywany
+      protocol: TCP
+      name: http
+  selector:
+    # wysyla ruch do podow z tym labelem
+    app: test-httpbin

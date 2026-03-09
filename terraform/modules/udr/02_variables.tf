@@ -23,8 +23,13 @@ variable "rg_location" {
   type = string
 }
 
-variable "jumpbox_snet_id" {
-  description = "Id of subnet where jumpbox vm is configured"
+# variable "jumpbox_snet_id" {
+#   description = "Id of subnet where jumpbox vm is configured"
+#   type = string
+# }
+
+variable "aks_snet_id" {
+  description = "Id of subnet where aks is configured"
   type = string
 }
 
