@@ -155,18 +155,19 @@ module "nsg" {
   jumpbox_snet_id = module.spoke-network.jumpbox_snet_id
 }
 
-# module "udr" {
-#   source = "./modules/udr"
+module "udr" {
+  source = "./modules/udr"
 
-#   workload    = var.workload
-#   environment = var.environment
-#   location    = var.location
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
 
-#   rg_name = module.spoke-network.rg_name
-#   rg_location = module.spoke-network.rg_location
-#   jumpbox_snet_id = module.spoke-network.jumpbox_snet_id
-#   firewall_private_ip = module.hub-firewall.firewall_private_ip
-# }
+  rg_name = module.spoke-network.rg_name
+  rg_location = module.spoke-network.rg_location
+
+  aks_snet_id = module.spoke-network.aks_subnet_id
+  firewall_private_ip = module.hub-firewall.firewall_private_ip
+}
 
 module "admin" {
   source = "./modules/admins"
@@ -187,12 +188,12 @@ module "aks" {
   aks_rbac_admin_group_object_id = module.admin.admin_group_id
 }
 
-module "ingress_nginx" {
-  source = "./modules/nginx_ingress_controller"
+# module "ingress_nginx" {
+#   source = "./modules/nginx_ingress_controller"
   
-  workload    = var.workload
-  environment = var.environment
-  location    = var.location
+#   workload    = var.workload
+#   environment = var.environment
+#   location    = var.location
 
-  aks_cluster_id = module.aks.aks_cluster_id
-}
+#   aks_cluster_id = module.aks.aks_cluster_id
+# }

@@ -13,6 +13,7 @@ resource "helm_release" "ingress_nginx" {
     service:
       annotations:
         service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      loadBalancerIP: 10.0.0.50
     nodeSelector:
       kubernetes.io/os: linux
   defaultBackend:
