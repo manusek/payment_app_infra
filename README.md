@@ -59,8 +59,7 @@ The diagrams below provide a general visualization of the project architecture.
 ## 📁 Project structure
 
 ```text
-payment-app/
-├── payment_app_infra/
+|── payment_app_infra/
 │   ├── application/
 │   │   ├── cert-manager/
 │   │   ├── nginx-ingress-controller/
